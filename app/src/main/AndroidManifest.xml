@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dikshay.mobilecomputing.assignments.ifthisthenthat" >
+    package="com.dikshay.mobilecomputing.assignments.ifthisthenthat">
+
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,8 +26,25 @@
         <service
             android:name=".battery.BatteryService"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true" />
+        <service
+            android:name=".battery.BatteryDisconnectDataService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".battery.BatterySendMessageService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".receipes.BatteryReduceBrightness" />
+        <activity
+            android:name=".battery.DummyBrightnessActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity="com.dikshay.mobilecomputing.assignments.ifthisthenthat.battery.Dummy"
+            android:theme="@style/EmptyActivity" />
+        <activity android:name=".receipes.BatteryDisconnectData" />
+        <activity android:name=".receipes.BatterySendMessage" />
+        <activity android:name=".receipes.NewImageUploadToDropbox"></activity>
     </application>
 
 </manifest>

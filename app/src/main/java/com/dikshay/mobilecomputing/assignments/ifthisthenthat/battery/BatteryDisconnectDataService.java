@@ -1,50 +1,31 @@
 package com.dikshay.mobilecomputing.assignments.ifthisthenthat.battery;
 
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Process;
-import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.dikshay.mobilecomputing.assignments.ifthisthenthat.Utils.Constants;
 
-public class BatteryService extends Service {
+/**
+ * Created by Dikshay on 4/18/2016.
+ */
+public class BatteryDisconnectDataService extends Service {
+
     private static final String TAG = "BatteryService";
-    private int batterylevelReduceBrightness = 0;
-    private Looper mServiceLooper;
-    private ServiceHandler mServiceHandler;
     private int previousBatteryLevel;
     private boolean firstBatteryRecord = true;
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper){
-            super(looper);
-        }
-        @Override
-        public void handleMessage(Message msg){
-            Log.d(TAG,msg.toString());
-        }
+    private int batterylevelDisconnectData = 0;
+    public BatteryDisconnectDataService()
+    {
 
     }
-    public BatteryService() {
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
@@ -53,28 +34,17 @@ public class BatteryService extends Service {
     @Override
     public void onCreate()
     {
-        HandlerThread thread = new HandlerThread("Service Thread Arguments", Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-        mServiceLooper = thread.getLooper();
-        mServiceHandler = new ServiceHandler(mServiceLooper);
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.BATTERY_CHANGED");
         registerReceiver(ConnectionReceiver,filter);
-
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Log.d(TAG, "Service Starting");
-        //here 0 is the default value
-        batterylevelReduceBrightness = intent.getIntExtra(Constants.BATTERY_LEVEL,0);
-        Log.d(TAG,"Service received battery level as"+batterylevelReduceBrightness);
-        Message message = mServiceHandler.obtainMessage();
-        message.arg1 = startId;
-        mServiceHandler.sendMessage(message);
-
-        //return START_STICKY;
+        batterylevelDisconnectData = intent.getIntExtra(Constants.BATTERY_LEVEL,0);
+        Log.d(TAG,"Service received battery level as"+batterylevelDisconnectData);
         return START_REDELIVER_INTENT;
+
     }
     @Override
     public void onDestroy()
@@ -83,36 +53,13 @@ public class BatteryService extends Service {
         Log.d("service done", "Battery Service execution done");
         unregisterReceiver(ConnectionReceiver);
     }
-
-    private void broadcastMessage(Context context,String key,String value)
+    private void disconnectWifi(Context context)
     {
-        Intent intent = new Intent("UI update Broadcast");
-        intent.putExtra(key,value);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
-    private void reduceBrightness(float brightness)
-    {
-        // This is important. In the next line 'brightness'
-        // should be a float number between 0.0 and 1.0
-        int brightnessInt = (int)(brightness*255);
-
-        //Check that the brightness is not 0, which would effectively
-        //switch off the screen, and we don't want that:
-        if(brightnessInt<1) {brightnessInt=1;}
-
-        // Set systemwide brightness setting.
-        Settings.System.putInt(getContentResolver(),
-                Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-        Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, brightnessInt);
-
-        // Apply brightness by creating a dummy activity
-        Intent intent = new Intent(getBaseContext(), DummyBrightnessActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("brightness value", brightness);
-        getApplication().startActivity(intent);
-
-
-
+        WifiManager wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+        if(wifiManager.isWifiEnabled())
+        {
+            wifiManager.setWifiEnabled(false);
+        }
     }
     private BroadcastReceiver ConnectionReceiver = new BroadcastReceiver() {
         @Override
@@ -124,12 +71,13 @@ public class BatteryService extends Service {
             Log.d(TAG,String.valueOf(currentBatteryLevel));
             if(firstBatteryRecord)
             {
-                if(currentBatteryLevel ==batterylevelReduceBrightness)
+                if(currentBatteryLevel ==batterylevelDisconnectData)
                 {
                     Log.d(TAG,"CurrentBatteryLevel:"+currentBatteryLevel);
                     Log.d(TAG,"PreviousBatteryLevel:"+previousBatteryLevel);
-                    Toast.makeText(context,"Condition met for reduce screen brightness",Toast.LENGTH_LONG).show();
-                    reduceBrightness(0.1f);
+                    Toast.makeText(context,"Condition met for disconnect wifi",Toast.LENGTH_LONG).show();
+                    //reduceBrightness(0.1f);
+                    disconnectWifi(context);
                 }
                 Log.d(TAG,"CurrentBatteryLevel:"+currentBatteryLevel);
                 Log.d(TAG,"PreviousBatteryLevel:"+previousBatteryLevel);
@@ -140,12 +88,13 @@ public class BatteryService extends Service {
             {
                 if(Math.abs(previousBatteryLevel-currentBatteryLevel)==1)
                 {
-                    if(currentBatteryLevel ==batterylevelReduceBrightness)
+                    if(currentBatteryLevel ==batterylevelDisconnectData)
                     {
                         Log.d(TAG,"CurrentBatteryLevel:"+currentBatteryLevel);
                         Log.d(TAG,"PreviousBatteryLevel:"+previousBatteryLevel);
-                        Toast.makeText(context,"Condition met for reduce screen brightness",Toast.LENGTH_LONG).show();
-                        reduceBrightness(0.1f);
+                        Toast.makeText(context,"Condition met for disconncect wifi",Toast.LENGTH_LONG).show();
+                        //reduceBrightness(0.1f);
+                        disconnectWifi(context);
                     }
                     previousBatteryLevel = currentBatteryLevel;
                 }
@@ -163,9 +112,8 @@ public class BatteryService extends Service {
                 }
             }
             //Toast.makeText(context,"batteryLevel:" + batteryPct,Toast.LENGTH_LONG).show();
-           // Intent intent = new Intent(this,Notification)
+            // Intent intent = new Intent(this,Notification)
         }
     };
 
 }
-
