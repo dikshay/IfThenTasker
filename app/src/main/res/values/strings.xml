@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">IfThisThenThat</string>
     <string name="action_settings">Settings</string>
+<<<<<<< HEAD
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
     <string name="hello_world">Hello World!</string>
+=======
+    <string name="title_activity_location_based_wifi_toggle">LocationBasedWifiToggle</string>
+>>>>>>> 958a7be3ede7d7de56f18885916b7efbc38852e6
 </resources>

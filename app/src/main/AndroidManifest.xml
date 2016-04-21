@@ -2,12 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dikshay.mobilecomputing.assignments.ifthisthenthat">
 
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+=======
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+>>>>>>> 958a7be3ede7d7de56f18885916b7efbc38852e6
 
     <application
         android:allowBackup="true"
@@ -23,6 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
 
         <service
             android:name=".battery.BatteryService"
@@ -50,6 +57,13 @@
         <activity android:name=".receipes.BatteryDisconnectData" />
         <activity android:name=".receipes.BatterySendMessage" />
         <activity android:name=".receipes.NewImageUploadToDropbox"></activity>
+=======
+        <activity android:name=".activity.Image_Activity" />
+        <activity
+            android:name=".activity.LocationBasedWifiToggle"
+            android:label="@string/title_activity_location_based_wifi_toggle"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+>>>>>>> 958a7be3ede7d7de56f18885916b7efbc38852e6
     </application>
 
 </manifest>
