@@ -25,7 +25,15 @@ public class NewImageUploadToDropbox extends AppCompatActivity {
 
                                             }
                                         });
-        MediaObserver mediaObserver = new MediaObserver(new Handler());
-        mediaObserver.observe();
+        Button deactivateButton = (Button)findViewById(R.id.deactivate);
+        deactivateButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(NewImageUploadToDropbox.this,ImageUploadDropboxService.class);
+                stopService(intent);
+            }
+        });
+        //MediaObserver mediaObserver = new MediaObserver(new Handler());
+        //mediaObserver.observe();
     }
 }
