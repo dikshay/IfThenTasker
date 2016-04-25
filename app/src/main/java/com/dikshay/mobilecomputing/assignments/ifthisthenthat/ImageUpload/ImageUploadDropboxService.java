@@ -12,7 +12,7 @@ import com.dikshay.mobilecomputing.assignments.ifthisthenthat.observer.MediaObse
  * Created by Dikshay on 4/19/2016.
  */
 public class ImageUploadDropboxService extends Service {
-    String TAG = "ImageUploadService";
+    String TAG = "ImageUploadDropboxService";
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.

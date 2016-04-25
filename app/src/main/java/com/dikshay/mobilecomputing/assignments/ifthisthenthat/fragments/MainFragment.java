@@ -14,9 +14,11 @@ import com.dikshay.mobilecomputing.assignments.ifthisthenthat.MainActivity;
 import com.dikshay.mobilecomputing.assignments.ifthisthenthat.R;
 import com.dikshay.mobilecomputing.assignments.ifthisthenthat.adapter.MyArrayAdapter;
 import com.dikshay.mobilecomputing.assignments.ifthisthenthat.battery.BatteryService;
+import com.dikshay.mobilecomputing.assignments.ifthisthenthat.googledrive.TestActivity;
 import com.dikshay.mobilecomputing.assignments.ifthisthenthat.receipes.BatteryDisconnectData;
 import com.dikshay.mobilecomputing.assignments.ifthisthenthat.receipes.BatteryReduceBrightness;
 import com.dikshay.mobilecomputing.assignments.ifthisthenthat.receipes.BatterySendMessage;
+import com.dikshay.mobilecomputing.assignments.ifthisthenthat.receipes.NewImageUploadToDrive;
 import com.dikshay.mobilecomputing.assignments.ifthisthenthat.receipes.NewImageUploadToDropbox;
 
 
@@ -25,7 +27,7 @@ import com.dikshay.mobilecomputing.assignments.ifthisthenthat.receipes.NewImageU
  */
 public class MainFragment extends Fragment{
     private String[] data={"Reduce brightness on battery","Disconnect wifi on battery","Send Message on battery",
-    "Upload new photos to Dropbox"};
+    "test google drive","Connect to Google Drive"};
     private ListView mainFragmentListView;
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,10 +64,14 @@ public class MainFragment extends Fragment{
                     startActivity(intent3);
                     break;
                 case 3:
-                    Log.d("ListView","upload to dropbox clicked");
-                    Intent intent4 = new Intent(getActivity(), NewImageUploadToDropbox.class);
+                    Log.d("ListView","testing google drive");
+                    Intent intent4 = new Intent(getActivity(), TestActivity.class);
                     startActivity(intent4);
                     break;
+                case 4:
+                    Log.d("ListView", "testing google drive api");
+                    Intent intent5 = new Intent(getActivity(), NewImageUploadToDrive.class);
+                    startActivity(intent5);
                 default:
                     Log.d("ListView","Error in input");
                     break;
